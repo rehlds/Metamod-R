@@ -1,24 +1,35 @@
-# vim: set tw=75 ft=none :
+# **Metamod-r** Changelog
 
-Current version: 1.20p35
+**Metamod-r** is based on the original version of [Metamod](http://metamod.org/) written by _Will Day_ for Half-Life 1 with some improvements from [Jussi Kivilinna](https://github.com/jkivilin) ([Metamod-p](https://github.com/jkivilin/metamod-p)). This product contains a large number of performance optimizations and more pure code. The core was written using JIT compiler.
 
-For newer changes, see Metamod-P git repository commit log at:
-http://metamod-p.git.sourceforge.net/git/gitweb.cgi?p=metamod-p/metamod-p;a=summary
+_____
 
----
 
-## 2012/08/08	1.19p34
+## 2017/11/15  `1.3.0.85`
+- [Download](https://github.com/rehlds/metamod-r/releases/tag/1.3.0.84).
+- :heavy_check_mark: Fixed parse plugins.ini (Load the plugins for a appropriate platform only)
+- :heavy_check_mark: Fixed crash for meta-plugins using UPX
+
+## 2017/10/27  `1.3.0.84`
+- First public release. [Download](https://github.com/rehlds/metamod-r/releases/tag/1.3.0.84).
+- :recycle: Minor refactoring
+
+## 2016/07/04 `0.0.0.0` (based on `1.20p35`)
+- Started `metamod-r` project by forkig from `metamod-p`. Based on version `1.20p35`.
+- Official changelog of original version `missed`.
+
+## 2012/08/08	`1.19p34`
 - Revert changes in 1.19p33 and start over with 1.19p32 code base
 - Fix compiling with latest userspace headers and gcc-4.6
 - Disabled building x86-64 binaries as Valve has dropped x86-64
 linux server support.
 
-## 2012/07/27	1.19p33
+## 2012/07/27	`1.19p33`
 - Accumulated fixes and changes over time
 - Fixes compiling with latest userspace headers and gcc-4.6
 - (introduced bugs, crashes, do not use)
 
-## 2007/08/12      1.19p32
+## 2007/08/12      `1.19p32`
 [Patch: Metamod-P v32 by Jussi Kivilinna]
 - Changed GCC optimization flags based on performance monitoring results,
 replaced '-O3 -funroll-all-loops' with '-O2'.
@@ -28,13 +39,13 @@ default on in sources so that MSVC compile is 1:1 with GCC compile.
 compile is 1:1 with GCC compile.
 - Fixed compiling META_PERFMON build with MSVC.
 - Fixed compiling with MSVC fixed by Nikolay "The Storm" Baklicharov.
-- [linux] Remake of dynamic linkent code. Parse dlsym function trampoline
+- `linux` Remake of dynamic linkent code. Parse dlsym function trampoline
 instead of parsing ELF structures.
-- [linux] Dropped AMD64 support since Valve doesn't support their AMD64 build
+- `linux` Dropped AMD64 support since Valve doesn't support their AMD64 build
 anymore and I don't have access to AMD64 machine to port new dynamic
 linkent code. Sorry!
 
-## 2007/04/05      1.19p31
+## 2007/04/05      `1.19p31`
 [Patch: Metamod-P v31 by Jussi Kivilinna]
 - Enabled 'regparam' for internal functions. Means that function arguments are
 passed through registers instead of stack, which increases performance.
@@ -42,15 +53,15 @@ passed through registers instead of stack, which increases performance.
 - Fixed a bug where plugins could not catch NewDLL calls for GameDLLs that
 do not provide NewDLL information.
 
-## 2007/04/04      1.19p30
+## 2007/04/04      `1.19p30`
 [Patch: Metamod-P v30 by Jussi Kivilinna]
 - Fixed safevoid_vsnprintf() on win32.
 
-## 2007/04/02      1.19p29
+## 2007/04/02      `1.19p29`
 [Patch: Metamod-P v29 by Jussi Kivilinna]
 - crash fix that didn't work
 
-## 2006/03/04      1.19p28
+## 2006/03/04      `1.19p28`
 [Patch: Metamod-P v28 by Jussi Kivilinna]
 - Removed use of __VA_ARGS__ (should be easy to port to msvc now).
 - Reduced size of extra engineapi function slots from 128 to 16.
@@ -60,18 +71,18 @@ they don't give extra performance.
 - Added api for using hook tables from plugins (thanks to BAILOPAN)
 - Re-enabled fix for engine_api varargs log calls with very long log string.
 
-## 2005/08/24      1.18p26
+## 2005/08/24      `1.18p26`
 [Patch: Metamod-P v26 by Jussi Kivilinna]
 - Fixed newapi functions not active on mods that don't use newapi.
 - [win32] New is_gamedll() code.
-- [linux] Fix for buggy DT_HASH in library walker function.
+- `linux` Fix for buggy DT_HASH in library walker function.
 - Following features were removed to improve stability. These changes were
 not present in metamod.org version:
 - Removed fix for engine_api varargs log calls with very long log
 string.
 - Removed optimized version of GET_USER_MSG_ID() for metamod-bots.
 
-## 2005/08/24      1.18p25
+## 2005/08/24      `1.18p25`
 [Patch: Metamod-P v25 by Jussi Kivilinna]
 - Added mutil::IsQueryingClientCvar().
 - Added support for new HLSDK-API functions:
@@ -92,30 +103,30 @@ to zero stack memory which lowered performance.
 instead of pointer, which increases performance on linux-i586.
 - Raised META_INTERFACE_VERSION to "5:12".
 - Fixed metamod_version cvar to show "1.18p25" instead of "1.18.0p25".
-- [linux] Improved dynamic linkent code.
-- [linux] Static linked with libgcc.
+- `linux` Improved dynamic linkent code.
+- `linux` Static linked with libgcc.
 
-## 2005/07/27      1.18p24
+## 2005/07/27      `1.18p24`
 [Patch: Metamod-P v24 by Jussi Kivilinna]
 - Updated to match latest metamod.org version.
 - Removed mm-p-extensions-API, since loading/unloading plugins functions
 are included in Metamod 1.18 in mutil-API.
 
-## 2005/04/22      1.17.4p23
+## 2005/04/22      `1.17.4p23`
 [Patch: Metamod-P v23 by Jussi Kivilinna]
 - Fixed broken RegMsgList caused by optimization for mm-bots.
 - Fixed optimization for mm-bots.
-- [linux] Removed ESF-Mod fix.
-- [linux] Minor performance tweaks and reduced filesize for linux.
+- `linux` Removed ESF-Mod fix.
+- `linux` Minor performance tweaks and reduced filesize for linux.
 
-## 2005/04/08      1.17.4p22
+## 2005/04/08      `1.17.4p22`
 [Patch: Metamod-P v22 by Jussi Kivilinna]
 - Optimized GET_USER_MSG_ID() function for metamod-bots.
 - Minor performance tweaks.
-- [linux] Looks for gamedll for Earth Special Forces Mod from 'linuxdlls'
+- `linux` Looks for gamedll for Earth Special Forces Mod from 'linuxdlls'
 directory after checking 'dlls'.
 
-## 2005/03/25      1.17.4p21
+## 2005/03/25      `1.17.4p21`
 [Patch: Metamod-P v21 by Jussi Kivilinna]
 - Fixed 'meta reload' not working on plugins that have failed loading.
 - Fixed bug with handling of metamod-plugin-bots, which might have caused
@@ -124,7 +135,7 @@ problems depending on order of loaded plugins. See 'call_count' in
 - Minor performace tweaks.
 - Changed all non-fatal error messages to warning messages.
 
-## 2005/03/05      1.17.4p20
+## 2005/03/05      `1.17.4p20`
 [Patch: Metamod-P v20 by Jussi Kivilinna]
 - Fixed bug with metamod.dll not having working relocation:
 - Makefile doesn't use 'dllwrap' for linking windows dlls anymore.
@@ -136,7 +147,7 @@ problems depending on order of loaded plugins. See 'call_count' in
 - Fixed wrong integer type for CRC32_t in 'hlsdk/common/crc.h'.
 - Removed 'metamod_compat-i386.so' from linux binary release.
 
-## 2005/02/27      1.17.4p19
+## 2005/02/27      `1.17.4p19`
 [Patch: Metamod-P v19 by Jussi Kivilinna]
 - Performance tweaks mainly for AMD64 (minor for i386).
 - Linux-i386 (metamod_i386.so) binary linked against glibc-2.1.3 for better
@@ -145,11 +156,11 @@ at: http://forums.unitedadmins.com/index.php?showtopic=44048
 - Binaries not linked against libstdc++ anymore for better compatibility
 (see: new_baseclass.h).
 
-## 2005/02/25      1.17.4p18
+## 2005/02/25      `1.17.4p18`
 [Patch: Metamod-P v18 by Jussi Kivilinna]
 - Fixed AMD64 support.
 
-## 2005/02/19      1.17.4p17
+## 2005/02/19      `1.17.4p17`
 [Patch: Metamod-P v17 by Jussi Kivilinna]
 - Renamed 'Metamod All-Mod-Support' to 'Metamod-P'.
 - Fixes to improve stability.
@@ -159,12 +170,12 @@ http://www.sourceforge.net/projects/metamod/
 - Added Mod recognition for Brain Bread 1.2, Snow-War 2.0 and
 Gangsta Wars 2.7.
 
-## 2005/02/13      1.17.3p16
+## 2005/02/13      `1.17.3p16`
 [Patch: All-Mod-Support v16 by Jussi Kivilinna]
 - Fixes to improve stability.
 - Minor performance tweaks.
 
-## 2005/01/10      1.17.3p15
+## 2005/01/10      `1.17.3p15`
 [Patch: All-Mod-Support v15 by Jussi Kivilinna]
 - New optimization which reduces binary size more than 50%.
 - Changed '-march=i586' to '-march=i686'. This means this binary
@@ -173,11 +184,11 @@ or newer.
 - Removed 'Active API Hooks' optimization.
 - Removed 'memory write detection' code.
 
-## 2004/11/27      1.17.3p14
+## 2004/11/27      `1.17.3p14`
 [Patch: All-Mod-Support v14 by Jussi Kivilinna]
 - Remake of new callback API.
 
-## 2004/11/27      1.17.3p13
+## 2004/11/27      `1.17.3p13`
 [Patch: All-Mod-Support v13 by Jussi Kivilinna]
 - New callback API for plugins to load/unload other plugins. See
 'mm_pextensions.h'.
@@ -186,19 +197,19 @@ or newer.
 - Minor performance tweaks.
 - Moved p13 code from osdep.cpp/h to osdep_p.cpp/h
 
-## 2004/11/17      1.17.3p12
+## 2004/11/17      `1.17.3p12`
 [Patch: All-Mod-Support v12 by Jussi Kivilinna]
 - Fixed crashing with 'memory write detection' (part of 'Active API Hooks').
 - Improved 'memory write detection' code.
 
-## 2004/11/16      1.17.3p11
+## 2004/11/16      `1.17.3p11`
 [Patch: All-Mod-Support v11 by Jussi Kivilinna]
 - Added new 'Active API Hooks' optimization, speeding up handling HLSDK-API
 functions that are not hooked by any plugins.
 - Added new command 'meta active' to list active hooks.
-- [linux] 'metamod_i386.so' is compiled with gcc-3.3.4 now. If that version
+- `linux` 'metamod_i386.so' is compiled with gcc-3.3.4 now. If that version
 doesn't work for you, use 'metamod_compat-i386.so'.
-- [linux] gcc-2.95 compiled binary is now 'metamod_compat-i386.so'.
+- `linux` gcc-2.95 compiled binary is now 'metamod_compat-i386.so'.
 - Merged updates from Metamod 1.17.3,
 http://www.sourceforge.net/projects/metamod/
 - Added Mod recognition for Zombie Panic Beta 0.91c, Out Break 1.0,
@@ -212,7 +223,7 @@ prefix were used, e.g. mm_pluginA.dll and mm_pluginB.dll.
 - Fixed potential bug initializing plugin incorrectly after unloading
 and loading plugins.
 
-## 2004/08/31      1.17.2p10
+## 2004/08/31      `1.17.2p10`
 [Patch: All-Mod-Support v10 by Jussi Kivilinna]
 - Merged updates from Metamod 1.17.2,
 http://www.sourceforge.net/projects/metamod/
@@ -237,10 +248,10 @@ override the "linux" keyword when used on the same plugin. Do not
 use "linux" when using "lin32" and/or "lin64" keywords for the same
 plugin.
 
-## 2004/07/28      1.17.1p9
+## 2004/07/28      `1.17.1p9`
 [Patch: All-Mod-Support v9 by Jussi Kivilinna]
-- [linux] Amd64-support.
-- [linux] New version of osdep.cpp:is_gamedll().
+- `linux` Amd64-support.
+- `linux` New version of osdep.cpp:is_gamedll().
 - Reads ELF directly and doesn't use external libraries.
 - Binary isn't linked with BFD library anymore, reduces filesize to
 less than 500kb.
@@ -250,13 +261,13 @@ less than 500kb.
 client-command.
 - Added 'clientmeta' config.ini setting.
 
-## 2004/07/04      1.17.1p8
+## 2004/07/04      `1.17.1p8`
 [Patch: All-Mod-Support v8 by Jussi Kivilinna]
 - Fixed memory leak in linux version of osdep.cpp:is_gamedll().
 - Fixes to improve stability.
 - Optimizations on META_DEBUG macro.
 
-## 2004/06/06      1.17.1p7
+## 2004/06/06      `1.17.1p7`
 [Patch: All-Mod-Support v7 by Jussi Kivilinna]
 - Official support for All-Mod-Support versions at http://koti.mbnet.fi/axh/
 - Merged updates from Metamod 1.17.1,
@@ -274,42 +285,43 @@ autodetection of gamedll.
 - Added 'autodetect' config.ini setting.
 - Small tweaks and optimizations at various different places.
 
-## 2004/05/21      1.17p6
+## 2004/05/21      `1.17p6`
 [Patch: All-Mod-Support v6 by Jussi Kivilinna]
 - Tweaks and optimizations on osdep.cpp:is_gamedll().
-- [linux] Added architecture check for i386 and x86-64 to is_gamedll().
+- `linux` Added architecture check for i386 and x86-64 to is_gamedll().
 
-## 2004/04/27	1.17p5
+## 2004/04/27	`1.17p5`
 [Patch: All-Mod-Support v5 by Jussi Kivilinna]
-## 2004/04/26	1.17p4
+## 2004/04/26	`1.17p4`
 [Patch: All-Mod-Support v4 by Jussi Kivilinna]
 - Amd64-test versions
 
-## 2004/04/25	1.17p3
+## 2004/04/25	`1.17p3`
 [Patch: All-Mod-Support v3 by Jussi Kivilinna]
 - Automatically searchs for gameDll for new mods that are not included in
 internal mod-list.
-- [linux] Cleaned up osdep_linkent_linux.cpp, might work with x86-64 build
+- `linux` Cleaned up osdep_linkent_linux.cpp, might work with x86-64 build
 now (not tested).
 
-## 2004/04/24	1.17p2
+## 2004/04/24	`1.17p2`
 [Patch: All-Mod-Support v2 by Jussi Kivilinna]
 - Extra functions slots are now passed all the way to the gameDll now too.
-- [linux] New method for dlsym hooking, no need for metamod_linkent_tool.so anymore.
+- `linux` New method for dlsym hooking, no need for metamod_linkent_tool.so anymore.
 - Made mm_* functions in dllapi.cpp and engine_api.cpp static.
 - Made mutil_* functions in mutil.cpp static.
 
-## 2004/04/22	1.17p1
+## 2004/04/22	`1.17p1`
 [Patch: All-Mod-Support v1 by Jussi Kivilinna]
 - Removed dependences on game.dll structures (CBasePlayer).
 - Replaced UTIL_ShowMessage with META_UTIL_ShowMessage.
 - [win32] Replaced entity linking with PE dll-export-table combining.
-- [linux] Replaced entity linking with dlsym hooking.
+- `linux` Replaced entity linking with dlsym hooking.
 - Removed entities from linkgame.cpp
 - Added 128 extra function slots on enginefuncs_t structure for future engine updates.
 
-## 2003/11/15	1.17
+## 2003/11/15	`1.17`
 - Added support for recently added routines in the HL Engine:
+```
 SequenceGet()
 SequencePickSentence()
 GetFileSize()
@@ -321,6 +333,7 @@ GetTimesTutorMessageShown()
 ProcessTutorMessageDecayBuffer()
 ConstructTutorMessageDecayBuffer()
 ResetTutorMessageDecayData()
+```
 - Removed mod recognition and entities for Master-Sword v1.3, at the
 request of the Mod's authors.
 - Added mod recognition and entities for HL-Rally vBeta 1.0, Kanonball
@@ -336,10 +349,12 @@ this time only "list" and "version" subcommands.
 flexible options passing, in addition to the current +localinfo method.
 - Default filename: addons/metamod/config.ini
 - Options include:
+```
 debuglevel <number>
 gamedll <path>
 plugins_file <path>
 exec_cfg <path>
+```
 - Added option "+localinfo mm_configfile <path>" to override default
 config.ini pathname.
 - Added "meta config" console command to display result of config
@@ -387,18 +402,18 @@ rather than maintained manually.
 - Makefile now using gcc-2.95 explicitly, to avoid using gcc3 at this
 time.
 
-## 2003/08/02	1.16.2
+## 2003/08/02	`1.16.2`
 - Mod recognition and entities for The Point of No Return v.Beta 4.0.
 - Even more entities for The Specialists v.Beta 2.0.
 
-## 2003/07/30	1.16.1
+## 2003/07/30	`1.16.1`
 - Mod recognition and entities for Master-Sword v1.3, The Wastes RC 1.2,
 and Monkeystrike v1.2.
 - Additional entities for Natural Selection v2.0, The Specialists v.Beta
 2.0, Earth's Special Forces v.Beta 1.1, The Battlegrounds v1.2, and
 International Online Soccer v2.0.
 
-## 2003/05/08	1.16
+## 2003/05/08	`1.16`
 - Added support for Server_GetBlendingInterface() in order to allow client
 and server to properly coordinate custom player model blending.  This
 should fix the issue with mismatched hitboxes observed with CS and DOD.
@@ -406,20 +421,20 @@ should fix the issue with mismatched hitboxes observed with CS and DOD.
 Morbid Inclination v1.0.
 - Added studioapi.{cpp,h} to provide Server_GetBlendingInterface.
 
-## 2003/05/03	1.15.3
+## 2003/05/03	`1.15.3`
 - More additional entities for Day of Defeat v1.0.
-
-## 2003/05/02	1.15.2
+`
+## 2003/05/02	`1.15.2`
 - Mod recognition and entities for Rival Species vBeta 1.0, Public Enemy
 vBeta 1.0, and Bumper Cars vAlpha.
 - Additional entities for Day of Defeat v1.0, Sven Coop v2.1, WormsHL
 vBeta 3.0, and Natural Selection v1.1.
 
-## 2003/04/09	1.15.1
+## 2003/04/09	`1.15.1`
 - Additional entities for Firearms v2.7 and Desert Crisis v1.5.
 - Fixed mod recognition for Adrenalinegamer v4.x and later.
 
-## 2003/02/12	1.15
+## 2003/02/12	`1.15`
 - Additional entities for VampireSlayer Chapter V.
 - Fixed entity name "TS_PowerUp" for The Specialists 1.5; should fix
 precache error for "models/powerup.mdl".
@@ -489,14 +504,14 @@ meta_api.cpp; etc.
 - Added tools/stlfilter to help hide -Weffc++ warnings from g++ STL
 headers (although not using STL at this time..)
 
-## 2003/01/24	1.14.1
+## 2003/01/24	`1.14.1`
 - Properly recognize win32 full pathname from GetGameDir.
 - Added "#include <direct.h>" for getcwd() under MSVC.
 - Trace plugin: Changed AlertMessage formatting, ie from
 "atype=at_console/1" to "atype=at_console(1)".
 - Stub plugin: fixed to compile under MSVC again.
 
-## 2003/01/23	1.14
+## 2003/01/23	`1.14`
 - Fixed to handle new behavior of engine routine GET_GAME_DIR under HL
 1.1.1.1 (CS 1.6) beta, where the routine no longer returns the
 fullpathname of the game directory, but now returns only the string
@@ -509,7 +524,7 @@ dll fullpathname, dll filename).
 - Added FAQ.
 - Some docs touchups.
 
-## 2003/01/18	1.13.4
+## 2003/01/18	`1.13.4`
 - Additional entities for betas of Counter-Strike 1.6 and TFC from HL
 1.1.1.1.
 - Added missing #include "osdep.h" to several files, to make sure things
@@ -518,7 +533,7 @@ like win32 vsnprintf are defined.
 hooking engine routines.
 - In trace plugin, changed logtag to all caps.
 
-## 2003/01/12	1.13.3
+## 2003/01/12	`1.13.3`
 - Additional entities and updated mod recognition for Earth's Special
 Forces Beta 1.
 - Mod recognition for Retro Firearms 2.5.
@@ -528,7 +543,7 @@ Forces Beta 1.
 bounds-checking (to help prevent buffer overflows).
 - Updated Copyright to include "2001-2003".
 
-## 2002/11/26	1.13.2
+## 2002/11/26	`1.13.2`
 - Mod recognition and entities for Azure Sheep v1.0, BuzzyBots v2.3,
 Outlawsmod v.Beta 1.5, The Specialists v.Beta 1.0, and StargateTC v.Beta
 2.2.
@@ -539,14 +554,14 @@ Global Warfare v.Beta 2.0, and Tour of Duty v1.1 Beta.
 - Corrected missing "const" in vdate.h (noted by Ravenous BugBlatter
 Beast).
 
-## 2002/10/06	1.13.1
+## 2002/10/06	`1.13.1`
 - Mod recognition and entities for Digital Paintball v1.0, Dragon Mod Z
 v1.7, Holy Wars v.beta2, and OeL Half-Life v4.0.
 - Additional entities for Adrenalinegamer Mod v6.0 and Natural Selection
 v1.0.
 - Corrected a cast in os_safe_call (from Olafur Osvaldsson).
 
-## 2002/08/24	1.13
+## 2002/08/24	`1.13`
 - New config file names and locations, per the Addon Development Standard
 rev 1.00.  Default config files are now:
 - $gamedir/addons/metamod/plugins.ini
@@ -557,22 +572,22 @@ rev 1.00.  Default config files are now:
 - Added release_notes.html.
 - Added function "valid_file" in support_meta.h.
 
-## 2002/07/11	1.12.4
+## 2002/07/11	`1.12.4`
 - Additional entities for Day of Defeat beta 3.0 and Tour of Duty 0.9.0.
 - Mod recognition and entities for Natural Selection 1.0.
 - Added "$pg" string for /usr/bin/ident.
 
-## 2002/07/01	1.12.3
+## 2002/07/01	`1.12.3`
 - Mod recognition and entities for Valve's Ricochet mod.
 - Additional entities for Tour of Duty 0.8.0.
 - Moved common code from LINK_ENTITY_TO_GAME to a function, rather than
 duplicating the code in ~2000 expanded macros.  Based on code from Jussi
 Kivilinna <kijuhe00@students.oamk.fi>.
 
-## 2002/06/04	1.12.2
+## 2002/06/04	`1.12.2`
 - Even more entities for Firearms rc2.6.
 
-## 2002/05/29	1.12.1
+## 2002/05/29	`1.12.1`
 - Mod recognition and entities for Desert Crisis 1.1, Tour of Duty 0.6.7,
 and Train Hunters beta 1.0.
 - Additional entities for GoldenEye 1.9C and Firearms rc2.6.
@@ -581,7 +596,7 @@ intended, rather than a partial path.
 - Updated Copyright to include "2001-2002".
 - Fixed Makefile to not update .tags or .htags by default.
 
-## 2002/04/22	1.12.0
+## 2002/04/22	`1.12.0`
 - Updated for HL 1109, which adds one Engine routine:
 const char *GetPlayerAuthId(edict_t *e);
 - Mod recognition and entities for The Battle Grounds 0.6, Gangwars Beta
@@ -597,7 +612,7 @@ IsMapValid, GetPlayerUserId, GetPlayerWONId, GetPlayerAuthId,
 CVarGetFloat, CVarGetString, AllocString, Time, IsDedicatedServer,
 GetCurrentPlayer, GetPlayerStats.
 
-## 2002/02/08	1.11.2
+## 2002/02/08	`1.11.2`
 - Hopefully complete list of entities for Day of Defeat beta 2.0.
 - Don't complain for NULL routines in gamedll's NEW_DLL_FUNCTIONS.  Should
 solve "Couldn't find api call: dod.dll:ShouldCollide" errors with DoD
@@ -605,7 +620,7 @@ b2.
 - Changed default for newapi ShouldCollide() from 0 to 1, per Mugsy@DoD's
 observations.
 
-## 2002/02/03	1.11.1
+## 2002/02/03	`1.11.1`
 - Mod recognition and entities for Snow-War 1.0, and Earth`s Special
 Forces version Alpha 2.0.
 - Additional entities for Oz 2.4.1, Svencoop 2.0, and partial entities for
@@ -618,7 +633,7 @@ recent "reached max msgs 256" errors).
 found in the previous release.
 - Some additional debugging in gamedll entity linking.
 
-## 2001/12/17	1.11.00
+## 2001/12/17	`1.11.00`
 - Mod recognition and entities for Weapon Wars v0.3.
 - Additional entities for version 1.2 of Global Warfare.
 - Linux binary linked against glibc-2.1.2 for better compatibility.
@@ -639,14 +654,14 @@ rather than local string, causing segfault on plugin unload.
 statement" warnings in MSVC.
 - Updated MSDN url references.
 
-## 2001/09/19	1.10.00
+## 2001/09/19	`1.10.00`
 - Updated for HL SDK 2.2, which adds two Engine routines:
 qboolean Voice_GetClientListening)(int iReceiver, int iSender);
 qboolean Voice_SetClientListening)(int iReceiver, int iSender, qboolean bListen);
 - Mod recognition and entities for "Scientist Hunt" v1.2 and Existence
 Beta 1.3.
 
-## 2001/08/01	1.09.00
+## 2001/08/01	`1.09.00`
 - Mod recognition and entities for 'Wanted!' v1.5.
 - Mod recognition for Adrenalinegamer v3.2 and v4.1 (no special entities).
 - Additional entities for version 2.3 of Oz Deathmatch.
@@ -655,20 +670,20 @@ Beta 1.3.
 META_INTERFACE_VERSION from 5:5 to 5:6.
 - Added proper GPL notices.
 
-## 2001/07/06	1.08.02
+## 2001/07/06	`1.08.02`
 - Added mod recognition and entities for Gunman Chronicles.
 - Added list of supported mods to docs.
 - Updated MSVC project/workspace files to match recent source changes.
 - Fixed problem with set_new_handler compiling under MSVC.
 
-## 2001/06/30	1.08.01
+## 2001/06/30	`1.08.01`
 - Updated for Day of Defeat v1.3.  The name of its win32 dll changed (was
 mp.dll; now dod.dll).  No new entities.
 - Added mod recognition and entities for Rocket Crowbar.
 - Fixed problem with windows internal DLL version (don't use leading
 zeros as compiler will assume it's octal notation).
 
-## 2001/06/16	1.08.00
+## 2001/06/16	`1.08.00`
 - Allow specifying/overriding various things on the command line, via
 "+localinfo".  Fields are:
 - mm_gamedll
@@ -710,10 +725,10 @@ accessing serverinfo and localinfo infokey buffers.
 - Unfinished code for event triggers is in the source, but is disabled
 (since it's not finished yet).
 
-## 2001/06/10	1.07.03
+## 2001/06/10	`1.07.03`
 - improper compile was reporting wrong version number
 
-## 2001/06/07	1.07.02
+## 2001/06/07	`1.07.02`
 - added mod recognition and best-guess list of entities for Deathmatch
 Classic v1 and Global Warfare Beta 1.0.
 - updated entity list with best-guess additions and corrected win32 dll
@@ -721,7 +736,7 @@ name for Wasteland Beta 2.
 - added additional entities for Frontline Force 1.2a, from list forwarded
 from the dev team.
 
-## 2001/05/25	1.07.01
+## 2001/05/25	`1.07.01`
 - added complete (hopefully) list of additional entities for Front Line
 Force 1.2a/1.3.
 - added best-guess list of entities for Day of Defeat b1.1.
@@ -737,7 +752,7 @@ separate list).
 comments.
 - added utils/getents.sh script to pull entity lists from .so files.
 
-## 2001/05/08	1.07.00
+## 2001/05/08	`1.07.00`
 - fixed "%s" server-crashing bug.  "You should never pass strings with
 unknown contents as the format string."  Metamod was passing a
 preformatted non-constant (thus unknown contents) string as the format
@@ -757,7 +772,7 @@ metamod before being passed to trace).
 CreateNamedEntity.
 - altered debug levels AlertMessage API routines in api_info.cpp
 
-## 2001/05/04	1.06.10
+## 2001/05/04	`1.06.10`
 - fixed a couple of entities for HL Paintball.
 - added links.html to docs, a set of links/URLs and books that I found
 helpful for the project.
@@ -774,7 +789,7 @@ more proper.
 - added MPluginList::find(plid_t id), for upcoming code additions.
 - added thread primitives to osdep, for upcoming code additions.
 
-## 2001/04/29	1.06.02
+## 2001/04/29	`1.06.02`
 - added entities and mod recognition for VampireSlayer and Open-Source
 Jailbreak.
 - updated mod recognition for current names of Action Half-Life's DLL/SO
@@ -785,7 +800,7 @@ files.
 tag in the version info for the win32 DLL.
 - disabled SDK's "DBG_" functions, for MSVC win32 debug compiles.
 
-## 2001/04/22	1.06.01
+## 2001/04/22	`1.06.01`
 - added some entities for FLF 1.2.
 - better info in trace plugin's log messages for
 DispatchObjectCollsionBox, SetModel, FindEntityByString, SetOrigin,
@@ -795,7 +810,7 @@ EntOffsetOfPEntity, PEntityOfEntIndex.
 - for non-critical interface version mismatch, changed from a META_ERROR
 to just META_LOG, since it's not, strictly speaking, an error.
 
-## 2001/04/17	1.06.00
+## 2001/04/17	`1.06.00`
 - added support for "metaexec.cfg", a commands file to be exec'd after
 loading the plugins, for plugin commands and cvars, since autoexec.cfg
 is parsed too early (before plugins loaded) and server.cfg is parsed too
@@ -827,7 +842,7 @@ any plugin.
 - updated the docs to include recent new features, as well as some better
 discussion of coding details.
 
-## 2001/04/06	1.05.00
+## 2001/04/06	`1.05.00`
 - created utility callback functions, for use by plugins, to reduce code
 duplication and help simplify some things.  Currently, these consist of
 only some convenient logging functions (LOG_CONSOLE, LOG_MESSAGE,
@@ -856,7 +871,7 @@ macro, to make it easier to add code to middle of API routines.
 - renamed util_meta.h to support_meta.h, to avoid confusion with mutil.h
 - some code cleanup (better 80-column linebreaks).
 
-## 2001/04/03	1.02.00
+## 2001/04/03	`1.02.00`
 - added support for Half-Life Paintball
 - added "*_mm" and "*_MM" to the list of suffixes to look for when loading
 plugins at console.
@@ -870,7 +885,7 @@ Post function).
 - renamed local SDK API routines to "mm_*" for easier debug breakpoints
 - altered debug levels for a couple API routines in api_info.cpp
 
-## 2001/04/01	1.01.00
+## 2001/04/01	`1.01.00`
 - replaced use of FStrEQ in most places with !strcasecmp, so that case
 doesn't matter for things like console commands ("META LOAD" will now
 work in addition to "meta load") and paths (like "-game CSTRIKE"; and
@@ -881,7 +896,7 @@ work).  Confusing.
 - added "by " when printing author info, to make it a bit clearer
 - added a bit more operation info to metamod.html
 
-## 2001/03/30	1.00.00
+## 2001/03/30	`1.00.00`
 - released as v1.0, for inclusion with release of Adminmod v2.50.
 - added $(VERSFILE) to Makefile and Config.mak, to better insure correct
 rebuild on version number changes
@@ -903,7 +918,7 @@ have anything to return (like hpb_bot does, when the real gamedll
 doesn't provide GetNewDLLFunctions).
 - add handling of gpGamedllFuncs to mm_stub's Meta_Attach().
 
-## 2001/03/27	1.0-rc5
+## 2001/03/27	`1.0-rc5`
 - fixed problem with crashing when a plugin failed to load (improper
 dereference of null 'info' structure; incomplete fix from rc2).
 - added a plugin status "badfile", for plugin files that appear to be
@@ -924,7 +939,7 @@ between the engine and the gamedll).
 - added console command "meta game" to show information about the loaded
 game DLL (to help troubleshoot issues with "metagame.ini").
 
-## 2001/03/25	1.0-rc4
+## 2001/03/25	`1.0-rc4`
 - split linkfunc.cpp into linkent.h, linkgame.cpp, linkplug.cpp
 - split entity lists for mods into separate files, one for each mod; these
 are used to build linkgame.cpp
@@ -937,7 +952,7 @@ unresolved CSaveRestoreBuffer symbols using older versions of gcc
 - removed "-Werror" from Makefile's default cflags; should only be used
 on devl system with edited SDK
 
-## 2001/03/18	1.0-rc3
+## 2001/03/18	`1.0-rc3`
 - central Makefile can now build optimzed as well as debugging targets;
 default to compile is debugging; default in 'dlls' dir is optimized
 - toplevel Makefile builds release tgz/zip files.  TGZ file includes only
@@ -947,7 +962,7 @@ files rather than symlinks.
 - added mod recognition for "judgedm" mod; still need entities list
 - added 4 entities for Firearms 2.5
 
-## 2001/03/07	1.0-rc2
+## 2001/03/07	`1.0-rc2`
 - fixed missing WINAPI in mm_trace GiveFnptrsToDll
 - added HTML version of docs
 - description field in metamod.ini is now optional:
@@ -981,7 +996,7 @@ cmd_meta_pluginlist() instead of Plugins->show()
 - now doesn't call plugins getnewapi if gamedll doesn't provide it
 - fixed incorrect apitable references in MPlugin::show()
 
-## 2001/02/08	1.0-rc1
+## 2001/02/08	`1.0-rc1`
 - fixed unistd.h under MSVC
 - fixed S_ISREG under MSVC
 - fixed strncasecmp under MSVC
@@ -990,4 +1005,3 @@ cmd_meta_pluginlist() instead of Plugins->show()
 - remade MSVC project for metamod
 - created MSVC project for mm_stub
 - added an example "metamod.ini" to ./docs
-
