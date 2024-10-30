@@ -1,4 +1,4 @@
-# **Metamod-r** Changelog
+# [Metamod-r](https://github.com/rehlds/metamod-r) Changelog
 
 **Metamod-r** is based on the original version of [Metamod](http://metamod.org/) written by _Will Day_ for Half-Life 1 with some improvements from [Jussi Kivilinna](https://github.com/jkivilin) ([Metamod-p](https://github.com/jkivilin/metamod-p)). This product contains numerous performance optimizations and cleaner code. The core was rewritten with a JIT compiler.
 
