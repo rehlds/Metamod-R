@@ -1,10 +1,10 @@
 blank_issues_enabled: true
 contact_links:
   - name: "metamod-r GitHub Repo"
-    url: https://github.com/theAsmodai/metamod-r
+    url: https://github.com/rehlds/metamod-r
     about: "Official repo"
   - name: metamod-r GitHub Documentation
-    url: https://github.com/theAsmodai/metamod-r/wiki
+    url: https://github.com/rehlds/metamod-r/wiki
     about: "Documentation"
   - name: "metamod-r on dev-cs.ru"
     url: https://dev-cs.ru/resources/208/
@@ -13,10 +13,10 @@ contact_links:
     url: https://metamod-r.org/
     about: "Official site"
   - name: "ReHLDS GitHub Repo"
-    url: https://github.com/dreamstalker/ReHLDS
+    url: https://github.com/rehlds/ReHLDS
     about: "Reverse-engineered HLDS"
   - name: "ReHLDS GitHub Documentation"
-    url: https://github.com/dreamstalker/ReHLDS/wiki
+    url: https://github.com/rehlds/ReHLDS/wiki
     about: "Reverse-engineered HLDS Documentation"
   - name: "ReHLDS on dev-cs.ru (RU)"
     url: https://dev-cs.ru/resources/64/
@@ -24,5 +24,3 @@ contact_links:
   - name: "ReHLDS on cs.rin.ru (EN)"
     url: https://cs.rin.ru/forum/viewtopic.php?f=29&t=67651
     about: "Thread at community forum"
-  - name: "ReHLDS site"
-    url: https://rehlds.ru/
