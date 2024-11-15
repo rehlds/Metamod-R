@@ -1,8 +1,8 @@
-# [Metamod-r](https://github.com/rehlds/metamod-r) [![Percentage of issues still open](http://isitmaintained.com/badge/open/rehlds/metamod-r.svg)](http://isitmaintained.com/project/rehlds/metamod-r "Percentage of issues still open") [![GitHub license](https://img.shields.io/github/license/rehlds/metamod-r.svg?longCache=true&style=flat-square)](https://github.com/rehlds/metamod-r/blob/master/LICENSE.md)
+# [Metamod-r](https://github.com/rehlds/metamod-r) [![Percentage of issues still open](http://isitmaintained.com/badge/open/rehlds/metamod-r.svg)](http://isitmaintained.com/project/rehlds/metamod-r "Percentage of issues still open") [![GitHub license](https://img.shields.io/github/license/rehlds/metamod-r.svg?longCache=true&style=flat-square)](https://github.com/rehlds/metamod-r/blob/master/LICENSE)
 
 **Metamod-r** is based on the original version of [Metamod](http://metamod.org/) written by _Will Day_ for Half-Life 1 with some improvements from [Jussi Kivilinna](https://github.com/jkivilin) ([Metamod-p](https://github.com/jkivilin/metamod-p)). This product contains a large number of performance optimizations and more pure code. The core was written using JIT compiler.
 
-**Metamod-r is recommended to be run with [ReHLDS](https://github.com/rehlds/ReHLDS) (`API 3.1+`). 
+**Metamod-r is recommended to be run with [ReHLDS](https://github.com/rehlds/ReHLDS) (`API 3.1+`).
 There is compatible with original `HLDS`**
 
 |HLDS | [ReHLDS](https://github.com/rehlds/ReHLDS) |  OS | Download |
@@ -14,7 +14,7 @@ There is compatible with original `HLDS`**
 [![GitHub issues](https://img.shields.io/github/issues/rehlds/metamod-r.svg?longCache=true&style=flat-square)](https://github.com/rehlds/metamod-r/issues)
 [![GitHub forks](https://img.shields.io/github/forks/rehlds/metamod-r.svg?longCache=true&style=flat-square)](https://github.com/rehlds/metamod-r/network)
 [![GitHub stars](https://img.shields.io/github/stars/rehlds/metamod-r.svg?longCache=true&style=flat-square)](https://github.com/rehlds/metamod-r/stargazers)
- 
+
 ## Documentation
 * All actual documentation in ![en](https://i.imgur.com/rm67tUZ.png) **English** and ![ru](https://i.imgur.com/ItziiKg.png) **Russian** languages is placed at [this link](https://github.com/rehlds/metamod-r/wiki).
 
