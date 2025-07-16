@@ -112,18 +112,19 @@ jobs:
 
       - name: Edit resources at windows binaries
         run: |
-         rcedit ${{ github.workspace }}\publish\addons\metamod\metamod.dll --set-version-string ProductName "Metamod-R" --set-file-version "${{ steps.get_version.outputs.version }}" --set-product-version "${{ steps.get_version.outputs.version }}" --set-version-string FileDescription "Metamod-R is fully reworked fork of original Metamod-p by Jussi Kivilinna. Metamod allows running multiple mod-like plugin DLLs, to add functionality or change the behavior of the running HLDS game mod., Commit: $env:GITHUB_SHA" --set-version-string "Comments" "Commit: $env:GITHUB_SHA" --set-version-string CompanyName "ReHLDS Dev Team" --set-version-string LegalCopyright "Copyright 2025 ReHLDS DevTeam"
+         rcedit ${{ github.workspace }}\publish\addons\metamod\metamod.dll --set-version-string ProductName "Metamod-R" --set-file-version "${{ steps.get_version.outputs.version }}" --set-product-version "${{ steps.get_version.outputs.version }}" --set-version-string FileDescription "Metamod-R is fully reworked fork of original Metamod-p by Jussi Kivilinna. Metamod allows running multiple mod-like plugin DLLs, to add functionality or change the behavior of the running HLDS game mod., Commit: $env:GITHUB_SHA" --set-version-string "Comments" "Commit: $env:GITHUB_SHA" --set-version-string CompanyName "ReHLDS Dev Team" --set-version-string LegalCopyright "Copyright 2025 ReHLDS DevTeam" --set-icon metamod/msvc/icon.ico
         shell: "pwsh"
 
       - name: Import PFX and sign
         if: github.event_name != 'pull_request'
         env:
           KEY_PFX_PASS: ${{ secrets.KEY_PFX_PASS }}
+        # https://github.com/actions/runner-images/blob/main/images/windows/Windows2025-Readme.md
         run: |
                $pfxBase64 = "${{ secrets.KEY_PFX_B64 }}"
                [IO.File]::WriteAllBytes("${{ github.workspace }}\signing-cert.pfx", [Convert]::FromBase64String($pfxBase64))
                certutil -f -p "${{ secrets.KEY_PFX_PASS }}" -importPFX "${{ github.workspace }}\signing-cert.pfx"
-               & 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86\signtool.exe' sign /a /f "${{ github.workspace }}\signing-cert.pfx"  /p $env:KEY_PFX_PASS /d "Metamod-R" /du "https://rehlds.dev/" /tr "http://timestamp.digicert.com" /td sha256 /fd sha256 /v ${{ github.workspace }}\publish\addons\metamod\metamod.dll
+               & 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x86\signtool.exe' sign /a /f "${{ github.workspace }}\signing-cert.pfx"  /p $env:KEY_PFX_PASS /d "Metamod-R" /du "https://rehlds.dev/" /tr "http://timestamp.digicert.com" /td sha256 /fd sha256 /v ${{ github.workspace }}\publish\addons\metamod\metamod.dll
                Remove-Item -Recurse -Force "${{ github.workspace }}\signing-cert.pfx"
         shell: "pwsh"
       - name: Deploy artifacts
@@ -313,3 +314,5 @@ jobs:
         with:
           files: |
             *.zip
+            *.7z
+            *.asc
