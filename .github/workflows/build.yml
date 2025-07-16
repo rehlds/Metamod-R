@@ -11,11 +11,12 @@ on:
     types: [opened, reopened, synchronize]
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   windows:
     name: 'Windows'
-    runs-on: windows-2019
+    runs-on: windows-2025
 
     env:
       solution: 'msvc/metamod.sln'
@@ -28,21 +29,103 @@ jobs:
         with:
           fetch-depth: 0
 
+# TODO: add support of 141_xp toolchain at VS2022+
+#      - name: Install v140, v141 and v142 toolsets
+#        shell: cmd
+#        run: |
+#          "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify ^
+#          --installPath "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" ^
+#          --add Microsoft.VisualStudio.Component.WindowsXP ^
+#          --add Microsoft.VisualStudio.Component.VC.v140 ^
+#          --add Microsoft.VisualStudio.Component.VC.v140.x86.x64 ^
+#          --add Microsoft.VisualStudio.Component.VC.v140.xp ^
+#          --add Microsoft.VisualStudio.Component.VC.140.CRT ^
+#          --add Microsoft.VisualStudio.Component.VC.v141 ^
+#          --add Microsoft.VisualStudio.Component.VC.v141.x86.x64 ^
+#          --add Microsoft.VisualStudio.Component.VC.v141.xp ^
+#          --add Microsoft.VisualStudio.Component.VC.v142 ^
+#          --add Microsoft.VisualStudio.Component.VC.v142.x86.x64 ^
+#          --quiet --norestart
+
+      - name: Select PlatformToolset
+        id: select_toolset
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $vs2019 = & $vswhere -products * -version "[16.0,17.0)" -property installationPath -latest
+          $vs2022 = & $vswhere -products * -version "[17.0,)" -property installationPath -latest
+
+          if ($vs2019) {
+            "toolset=v142" >> $env:GITHUB_OUTPUT
+            Write-Host "Selected v142"
+          } elseif ($vs2022) {
+            "toolset=v143" >> $env:GITHUB_OUTPUT
+            Write-Host "Selected v143 toolset"
+          } else {
+            Write-Error "No suitable Visual Studio installation found"
+            exit 1
+          }
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
       - name: Build
         run: |
-          msbuild ${{ env.solution }} -p:Configuration="${{ env.buildRelease }}" /t:Clean,Build /p:Platform=${{ env.buildPlatform }} /p:PlatformToolset=v142
+          $toolset = '${{ steps.select_toolset.outputs.toolset }}'
+          msbuild ${{ env.solution }} -p:Configuration="${{ env.buildRelease }}" /t:Clean,Build /p:Platform=${{ env.buildPlatform }} /p:PlatformToolset=$toolset /p:XPDeprecationWarning=false
+
+      - name: Get app version
+        id: get_version
+        shell: pwsh
+        run: |
+          $versionFile = "metamod/version/appversion.h"
+          if (-not (Test-Path $versionFile)) {
+            Write-Error "Version file not found: $versionFile"
+            exit 1
+          }
+
+          $content = Get-Content $versionFile
+          foreach ($line in $content) {
+            if ($line -match '^\s*#define\s+APP_VERSION\s+"([^"]+)"') {
+              $version = $matches[1]
+              "version=$version" >> $env:GITHUB_OUTPUT
+              Write-Host "Found version: $version"
+              exit 0
+            }
+          }
+          Write-Error "APP_VERSION not found in file"
+          exit 1
+
+      - name: Show version
+        run: echo "Version is ${{ steps.get_version.outputs.version }}"
+      - name: Get rcedit from chocolatey
+        shell: pwsh
+        run: |
+          choco install rcedit -y
 
       - name: Move files
         run: |
           mkdir publish\debug
           mkdir publish\addons\metamod
-
           move msvc\${{ env.buildRelease }}\metamod.dll publish\addons\metamod\metamod.dll
           move msvc\${{ env.buildRelease }}\metamod.pdb publish\debug\metamod.pdb
 
+      - name: Edit resources at windows binaries
+        run: |
+         rcedit ${{ github.workspace }}\publish\addons\metamod\metamod.dll --set-version-string ProductName "Metamod-R" --set-file-version "${{ steps.get_version.outputs.version }}" --set-product-version "${{ steps.get_version.outputs.version }}" --set-version-string FileDescription "Metamod-R is fully reworked fork of original Metamod-p by Jussi Kivilinna. Metamod allows running multiple mod-like plugin DLLs, to add functionality or change the behavior of the running HLDS game mod., Commit: $env:GITHUB_SHA" --set-version-string "Comments" "Commit: $env:GITHUB_SHA" --set-version-string CompanyName "ReHLDS Dev Team" --set-version-string LegalCopyright "Copyright 2025 ReHLDS DevTeam"
+        shell: "pwsh"
+
+      - name: Import PFX and sign
+        if: github.event_name != 'pull_request'
+        env:
+          KEY_PFX_PASS: ${{ secrets.KEY_PFX_PASS }}
+        run: |
+               $pfxBase64 = "${{ secrets.KEY_PFX_B64 }}"
+               [IO.File]::WriteAllBytes("${{ github.workspace }}\signing-cert.pfx", [Convert]::FromBase64String($pfxBase64))
+               certutil -f -p "${{ secrets.KEY_PFX_PASS }}" -importPFX "${{ github.workspace }}\signing-cert.pfx"
+               & 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86\signtool.exe' sign /a /f "${{ github.workspace }}\signing-cert.pfx"  /p $env:KEY_PFX_PASS /d "Metamod-R" /du "https://rehlds.dev/" /tr "http://timestamp.digicert.com" /td sha256 /fd sha256 /v ${{ github.workspace }}\publish\addons\metamod\metamod.dll
+               Remove-Item -Recurse -Force "${{ github.workspace }}\signing-cert.pfx"
+        shell: "pwsh"
       - name: Deploy artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -71,6 +154,50 @@ jobs:
             git cmake rsync \
             g++ gcc
 
+
+      - name: GPG Import
+        run: |
+          echo "${{ secrets.PUB_ASC }}" > "${{ secrets.PUB_ASC_FILE }}"
+          echo "${{ secrets.KEY_ASC }}" > "${{ secrets.KEY_ASC_FILE }}"
+
+          # Import the public key
+          gpg --batch --yes --import "${{ secrets.PUB_ASC_FILE }}"
+          if [[ $? -ne 0 ]]; then
+            echo "Error: Failed to import the public key"
+            exit 1
+          fi
+
+          # Import the private key
+          gpg --batch --yes --import "${{ secrets.KEY_ASC_FILE }}"
+          if [[ $? -ne 0 ]]; then
+            echo "Error: Failed to import the private key"
+            exit 2
+          fi
+
+          # Extract the fingerprint of the imported public key
+          GPG_LINUX_FINGERPRINT=$(gpg --list-keys --with-colons | grep '^fpr' | head -n 1 | cut -d: -f10)
+
+          # Check if the fingerprint was extracted
+          if [[ -z "$GPG_LINUX_FINGERPRINT" ]]; then
+            echo "Error: Failed to extract the fingerprint of the key"
+            exit 3
+          fi
+
+          # Set the trust level for the key
+          echo "$GPG_LINUX_FINGERPRINT:6:" | gpg --batch --import-ownertrust
+          if [ $? -ne 0 ]; then
+            echo "Error: Failed to set trust for the key $GPG_LINUX_FINGERPRINT"
+            exit 4
+          fi
+
+          echo "Key $GPG_LINUX_FINGERPRINT successfully imported and trusted"
+          gpg --list-keys
+
+          #export for global use
+          echo "GPG_LINUX_FINGERPRINT=$GPG_LINUX_FINGERPRINT" >> $GITHUB_ENV
+        shell: bash
+        if: github.event_name != 'pull_request'
+
       - name: Build using Intel GCC Compiler
         run: |
           rm -rf build && cmake -DCMAKE_BUILD_TYPE=COMPAT_GLIBC -B build && cmake --build build -j8
@@ -89,6 +216,7 @@ jobs:
             --include=plinfo.h \
             --exclude='*' metamod/src/ publish/sdk
           rsync metamod/extra/config.ini publish/addons/metamod
+          rsync metamod/extra/plugins.ini publish/addons/metamod
           rsync -a metamod/extra/example/ publish/example_plugin
           rsync -a publish/sdk/ publish/example_plugin/include/metamod
 
@@ -152,7 +280,29 @@ jobs:
           github.event.action == 'published' &&
           startsWith(github.ref, 'refs/tags/')
         run: |
+
+          # new runner, niw signs
+          echo "${{ secrets.PUB_ASC }}" > "${{ secrets.PUB_ASC_FILE }}"
+          echo "${{ secrets.KEY_ASC }}" > "${{ secrets.KEY_ASC_FILE }}"
+          gpg --batch --yes --import "${{ secrets.PUB_ASC_FILE }}"
+          gpg --batch --yes --import "${{ secrets.KEY_ASC_FILE }}"
+          GPG_LINUX_FINGERPRINT=$(gpg --list-keys --with-colons | grep '^fpr' | head -n 1 | cut -d: -f10)
+          echo "$GPG_LINUX_FINGERPRINT:6:" | gpg --batch --import-ownertrust
+          echo "GPG_LINUX_FINGERPRINT=$GPG_LINUX_FINGERPRINT" >> $GITHUB_ENV
+
+          sign_file() {
+            local file=$1
+            gpg --batch --yes --detach-sign --armor -u "$GPG_LINUX_FINGERPRINT" "$file"
+            if [ $? -ne 0 ]; then
+              echo "Error: Failed to sign $file"
+              exit 2
+            fi
+            echo "$file signed successfully."
+          }
+
+          # Pack and sign final archive
           7z a -tzip metamod-bin-${{ env.APP_VERSION }}.zip addons/ example_plugin/ sdk/
+          sign_file "metamod-bin-${{ env.APP_VERSION }}.zip"
 
       - name: Publish artifacts
         uses: softprops/action-gh-release@v2
