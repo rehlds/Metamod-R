@@ -46,7 +46,6 @@ if (DEBUG)
 	set(COMPILE_FLAGS "${COMPILE_FLAGS} -g3 -O0 -ggdb")
 else()
 	set(COMPILE_FLAGS "${COMPILE_FLAGS} -g0 -O3 -fno-stack-protector")
-	set(LINK_FLAGS "${LINK_FLAGS} -s")
 endif()
 
 # Check Intel C++ compiler
