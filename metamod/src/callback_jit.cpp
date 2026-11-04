@@ -402,6 +402,11 @@ size_t CJit::is_callback_retaddr(uint32 addr)
 	return false;
 }
 
+bool CJit::contain(uint32 addr) const
+{
+	return m_callback_allocator.contain(addr);
+}
+
 char* CJit::find_callback_pattern(char* pattern, size_t len)
 {
 	return m_callback_allocator.find_pattern(pattern, len);

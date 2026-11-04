@@ -23,7 +23,7 @@ char *static_allocator::strdup(const char *string)
 void static_allocator::deallocate_all()
 {
 	for (auto page : m_pages)
-#ifdef WIN32
+#ifdef _WIN32
 		VirtualFree(page, 0, MEM_RELEASE);
 #else
 		munmap(page, Pagesize);
@@ -37,7 +37,7 @@ size_t static_allocator::memory_used() const
 	return (m_pages.size() - 1) * Pagesize + m_used;
 }
 
-bool static_allocator::contain(uint32 addr)
+bool static_allocator::contain(uint32 addr) const
 {
 	for (auto p : m_pages) {
 		if (uint32(p) <= addr && addr < uint32(p) + Pagesize)
@@ -114,5 +114,8 @@ char *mem_find_ref(char *pos, char *end, char opcode, uint32 ref, bool relative)
 char *mem_find_string_push(char *addr, const char *string, size_t len)
 {
 	char *ptr = mem_find_pattern(addr, len, string, Q_strlen(string) + 1);
+	if (!ptr)
+		return nullptr;
+
 	return mem_find_ref(addr, addr + len - 5, '\x68', (uint32)ptr, false);
 }

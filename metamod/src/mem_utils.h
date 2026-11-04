@@ -19,7 +19,7 @@ public:
 	char *strdup(const char *string);
 	void deallocate_all();
 	size_t memory_used() const;
-	bool contain(uint32 addr);
+	bool contain(uint32 addr) const;
 	char *find_pattern(char *pattern, size_t len);
 
 	template<typename T>

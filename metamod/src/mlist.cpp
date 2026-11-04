@@ -281,7 +281,7 @@ bool MPluginList::ini_startup()
 		if (pmatch) {
 			META_DEBUG(1, "ini: Plugin in line %d overrides existing plugin", ln);
 			int index = pmatch->m_index;
-			Q_memset(pmatch, 0, sizeof(MPlugin));
+			pmatch->reset();
 			pmatch->m_index = index;
 		}
 
@@ -352,7 +352,7 @@ bool MPluginList::ini_refresh()
 				if (pl_found->m_action == PA_LOAD) {
 					META_DEBUG(1, "ini: Plugin in line %d overrides loading of plugin", ln);
 					int _index = pl_found->m_index;
-					Q_memset(pl_found, 0, sizeof(MPlugin));
+					pl_found->reset();
 					pl_found->m_index = _index;
 				}
 				else {
@@ -700,12 +700,12 @@ void MPluginList::show_static(int source_index)
 			2 + WIDTH_MAX_PLUGINS, p->str_source(SO_SHOW), p->str_loadable(SL_SHOW), p->str_unloadable(SL_SHOW));
 
 		if (p->m_status == PL_RUNNING)
-			nPlugins++;
+			nRunPlugins++;
 
-		nRunPlugins++;
+		nPlugins++;
 	}
 
-	META_CONS("%d plugins, %d running", nRunPlugins, nPlugins);
+	META_CONS("%d plugins, %d running", nPlugins, nRunPlugins);
 }
 
 // List plugins and information to Player/client entity.  Differs from the

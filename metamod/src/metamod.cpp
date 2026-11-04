@@ -457,23 +457,41 @@ static void meta_collect_fix_data(uint32* const esp, std::vector<fixdata_t>& dat
 {
 	uint32* pret = esp;
 
-	// scan for retaddr
-	do pret--;
-	while (!g_jit.is_callback_retaddr(*pret));
+	// Scan the stack for the callback return address.
+	//
+	// All the backward scans here are bounded: walking without a limit can
+	// run past the mapped region into unmapped memory and segfault. This
+	// happens with a stale esp_save after the callback frame has already been
+	// unwound (e.g. on map change, see issue #91). When a pattern cannot be
+	// found within the bound, we bail out gracefully - there is simply
+	// nothing left to fix for that frame.
+	{
+		constexpr size_t MAX_STACK_SCAN = 4096 / sizeof(uint32); // 4 KB
+		size_t left = MAX_STACK_SCAN;
+		do {
+			if (!left--)
+				return; // callback retaddr not found
+			pret--;
+		} while (!g_jit.is_callback_retaddr(*pret));
+	}
 
 	char* raddr = (char *)*pret;
-	size_t args_count = 0;
-
-	if ((unsigned char)raddr[0] == 0x83 && (unsigned char)raddr[1] == 0xC4) // add esp, XX
-		args_count = raddr[2] / 4;
 
 	// 8B 0D 4E 61 BC 00        mov     ecx, ds:0BC614Eh
 	// 80 3D 4E 61 BC 00 05     cmp     byte ptr ds:0BC614Eh, 5
 	char pattern[] = "\x8B\x0D\x2A\x2A\x2A\x2A\x80\x3D";
 
-	// scan for callback addr
-	do raddr--;
-	while (!mem_compare(raddr, pattern, sizeof pattern - 1));
+	// scan for callback addr (bounded to the generated callback body)
+	{
+		constexpr size_t MAX_CODE_SCAN = 4096; // one page
+		char* const code_min = raddr - MAX_CODE_SCAN;
+		do {
+			raddr--;
+		} while (raddr >= code_min && g_jit.contain((uint32)raddr) && !mem_compare(raddr, pattern, sizeof pattern - 1));
+
+		if (raddr < code_min || !g_jit.contain((uint32)raddr))
+			return;
+	}
 
 	uint32 callback = *(uint32 *)(raddr + 2); // mov ecx, [callback]
 	data.push_back({pret, callback});
@@ -485,9 +503,17 @@ static void meta_collect_fix_data(uint32* const esp, std::vector<fixdata_t>& dat
 	// 66 0F D6 8C 24 36 05 00 00   movq    qword ptr [esp + 536h], xmm1
 	char pattern2[] = "\x66\x0F\xD6\x2A\x24";
 
-	// scan for mg_backup at stack
-	do raddr--;
-	while (!mem_compare(raddr, pattern2, sizeof pattern2 - 1));
+	// scan for mg_backup at stack (bounded to the generated callback body)
+	{
+		constexpr size_t MAX_CODE_SCAN = 4096; // one page
+		char* const code_min = raddr - MAX_CODE_SCAN;
+		do {
+			raddr--;
+		} while (raddr >= code_min && g_jit.contain((uint32)raddr) && !mem_compare(raddr, pattern2, sizeof pattern2 - 1));
+
+		if (raddr < code_min || !g_jit.contain((uint32)raddr))
+			return;
+	}
 
 	uint32 mg_backup;
 	if (raddr[3] == 0x4C)

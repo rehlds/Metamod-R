@@ -159,7 +159,7 @@ MRegCvar::MRegCvar(cvar_t* cv_ptr, MPlugin* cv_plugin) : m_cvar(cv_ptr), m_plugi
 	m_cvar->string = Q_strdup(cv_ptr->string);
 	m_cvar->flags = cv_ptr->flags;
 	m_cvar->value = cv_ptr->value;
-	m_cvar->next = cv_ptr->next;
+	m_cvar->next = nullptr;
 }
 
 MRegCvar::~MRegCvar()

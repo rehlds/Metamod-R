@@ -359,7 +359,7 @@ bool MPlugin::platform_match(MPlugin *other) const
 	if (m_status >= PL_OPENED && other->status() >= PL_OPENED && !Q_strcmp(m_info->logtag, other->info()->logtag))
 		return true;
 
-	if (m_desc[0] != '\0' && other->description()[0] != '0' && !Q_stricmp(m_desc, other->description()))
+	if (m_desc[0] != '\0' && other->description()[0] != '\0' && !Q_stricmp(m_desc, other->description()))
 		return true;
 
 	const char* end = Q_strrchr(m_file, '_');
@@ -694,6 +694,30 @@ bool MPlugin::clear()
 	m_is_unloader = false;
 
 	return true;
+}
+
+// Fully reset the plugin to its freshly-constructed (empty) state, releasing
+// the loaded module handle and any allocated function tables.
+//
+// This replaces the previous `memset(pmatch, 0, sizeof(MPlugin))` in
+// MPluginList, which is undefined behavior for a class with non-trivial
+// members (CSysModule) and would silently leak the DLL handle and tables.
+void MPlugin::reset()
+{
+	// If the file is open, close it (best effort).
+	if (m_sys_module.is_opened())
+		m_sys_module.unload();
+
+	free_table(m_gamedll_funcs.dllapi_table);
+	free_table(m_gamedll_funcs.newapi_table);
+	free_table(m_dllapi_table);
+	free_table(m_dllapi_post_table);
+	free_table(m_newapi_table);
+	free_table(m_newapi_post_table);
+	free_table(m_engine_table);
+	free_table(m_engine_post_table);
+
+	*this = MPlugin();
 }
 
 // Unload a plugin from plugin request
@@ -1202,7 +1226,7 @@ const char *MPlugin::str_reason(PL_UNLOAD_REASON reason) const
 // NOW is to describe current situation of load/unload attempt.
 const char *MPlugin::str_loadtime(PLUG_LOADTIME ptime, STR_LOADTIME fmt)
 {
-	if (ptime >= PT_NEVER || ptime <= PT_ANYPAUSE)
+	if (ptime >= PT_NEVER && ptime <= PT_ANYPAUSE)
 		return s_rPrintLoadTime[ptime][fmt];
 
 	return UTIL_VarArgs((fmt == SL_SHOW) ? "UNK-%i" : "unknown (%i)", ptime);
