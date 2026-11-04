@@ -127,7 +127,7 @@ static ElfW(Addr) dlsize(void *base)
 module_handle_t CSysModule::load(void *addr)
 {
 	Dl_info dlinfo;
-	if ((!dladdr(addr, &dlinfo) && !dlinfo.dli_fbase) || !dlinfo.dli_fname) {
+	if (!dladdr(addr, &dlinfo) || !dlinfo.dli_fbase || !dlinfo.dli_fname) {
 		return INVALID_HANDLE;
 	}
 
@@ -142,7 +142,7 @@ module_handle_t CSysModule::load(void *addr)
 module_handle_t CSysModule::find(void *addr)
 {
 	Dl_info dlinfo;
-	if ((!dladdr(addr, &dlinfo) && !dlinfo.dli_fbase) || !dlinfo.dli_fname) {
+	if (!dladdr(addr, &dlinfo) || !dlinfo.dli_fbase || !dlinfo.dli_fname) {
 		return INVALID_HANDLE;
 	}
 

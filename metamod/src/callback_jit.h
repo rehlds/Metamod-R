@@ -108,6 +108,7 @@ public:
 	void clear_callbacks();
 	void clear_tramps();
 	size_t is_callback_retaddr(uint32 addr);
+	bool contain(uint32 addr) const;
 	char* find_callback_pattern(char* pattern, size_t len);
 
 private:

@@ -218,8 +218,10 @@ static bool combine_module_export_tables(CSysModule *meta_module, CSysModule *ga
 
 	for (i = 0; i < newNumberOfNames; i++)
 	{
+		// Translate the name string pointers (VAs) to RVAs. The ordinals in
+		// newNameOrdinals are 16-bit indices into the function table, not
+		// addresses, so they must NOT be passed through va_to_rva().
 		newNames[i] = va_to_rva(moduleMeta, newNames[i]);
-		newNameOrdinals[i] = (unsigned short)va_to_rva(moduleMeta, newNameOrdinals[i]);
 	}
 
 	DWORD OldProtect;

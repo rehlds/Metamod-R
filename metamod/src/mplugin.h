@@ -102,6 +102,7 @@ public:
 	bool unpause();
 	bool retry(PLUG_LOADTIME now, PL_UNLOAD_REASON reason);							// if previously failed
 	bool clear();
+	void reset();																		// release resources and return to empty state
 	bool plugin_unload(plid_t plid, PLUG_LOADTIME now, PL_UNLOAD_REASON reason);	// other plugin unloading
 	void show();																	// print info about plugin to console
 
